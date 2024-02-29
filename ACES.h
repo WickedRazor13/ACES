@@ -26,9 +26,13 @@ private slots:
 
     void on_quitButton_clicked();
 
+    void on_memoryButton_clicked();
+
 private:
     Ui::ACES *ui;
 
     SpotTheDiff *spotDiffGame;
+
+
 };
 #endif // ACES_H

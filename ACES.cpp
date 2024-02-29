@@ -60,3 +60,9 @@ void ACES::on_quitButton_clicked()
     QApplication::quit();
 }
 
+
+void ACES::on_memoryButton_clicked()
+{
+
+}
+
