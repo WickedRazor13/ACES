@@ -15,19 +15,13 @@ memory::memory(QWidget *parent) :
     // Set starting game state
     currentState = state::Display;
 
-    connect(gameTimer, SIGNAL(timeout()), this, SLOT(advanceTimerDisplay()));
-    connect(this, SIGNAL(timerFinished()), this, SLOT(advanceGame()));
+    connect(gameTimer, SIGNAL(timeout()), this, SLOT(advanceTimer()));
+    connect(this, SIGNAL(timerFinished()), this, SLOT(advanceNum()));
+    connect(this, SIGNAL(stateFinished()), this, SLOT(advanceGame()));
+
+
     // Setup Timer display
     countdownSeconds = DISPLAY_TIME;
-
-    int minutes = countdownSeconds / 60;
-    int remainingSeconds = countdownSeconds % 60;
-
-    QString timeString = QString("%1:%2")
-                             .arg(minutes, 2, 10, QLatin1Char('0'))
-                             .arg(remainingSeconds, 2, 10, QLatin1Char('0'));
-
-    ui->TimerLabel->setText(timeString);
 
     initGame();
     gameTimer->start(TIMER_INTERVAL);
@@ -41,7 +35,12 @@ memory::~memory()
 void memory::initGame()
 {
     ui->restartButton->hide();
-    displayNum = QRandomGenerator::global()->bounded(RNG_MIN,RNG_MAX+1);
+
+    QRandomGenerator rng;
+    std::shuffle(seenNum.begin(), seenNum.end(), rng);
+    std::shuffle(newNum.begin(), newNum.end(), rng);
+
+    displayNum = seenNum[0];
     ui->NumLabel->setText(QString::number(displayNum));
 }
 
@@ -66,24 +65,29 @@ void memory::exitGame()
     emit homeClicked();
 }
 
-void memory::advanceTimerDisplay()
+void memory::advanceTimer()
 {
     if (countdownSeconds > 0) {
         countdownSeconds--;
-
-        int minutes = countdownSeconds / 60;
-        int remainingSeconds = countdownSeconds % 60;
-
-        QString timeString = QString("%1:%2")
-                                 .arg(minutes, 2, 10, QLatin1Char('0'))
-                                 .arg(remainingSeconds, 2, 10, QLatin1Char('0'));
-
-        ui->TimerLabel->setText(timeString);
     }
     else {
         gameTimer->stop();
-        currentState = static_cast<state>(static_cast<int>(currentState)+1);
+        //currentState = static_cast<state>(static_cast<int>(currentState)+1);
         emit timerFinished();
+    }
+}
+
+void memory::advanceNum()
+{
+    if (index < NUM_NUM) {
+        displayNum = seenNum[++index];
+        ui->NumLabel->setText(QString::number(displayNum));
+        countdownSeconds = DISPLAY_TIME;
+        gameTimer->start(TIMER_INTERVAL);
+    }
+    else {
+        currentState = static_cast<state>(static_cast<int>(currentState)+1);
+        emit stateFinished();
     }
 }
 
@@ -92,25 +96,22 @@ void memory::advanceGame()
     switch(currentState) {
         case Display:
             initGame();
-            ui->label->setText("Memorize the numbers below.");
+            ui->label->setText("Study the numbers below.");
             countdownSeconds = DISPLAY_TIME;
-            ui->TimerLabel->show();
             gameTimer->start(TIMER_INTERVAL);
             ui->NumLabel->show();
             break;
         case Hide:
             countdownSeconds = DOWN_TIME;
             gameTimer->start(TIMER_INTERVAL);
-            ui->TimerLabel->hide();
             ui->NumLabel->hide();
             ui->label->hide();
             break;
-        case Receive:
+        case Test:
             countdownSeconds = ENTRY_TIME;
             ui->label->setText("Enter the number.");
             ui->label->show();
             ui->lineEdit->clear();
-            ui->TimerLabel->show();
             gameTimer->start(TIMER_INTERVAL);
             ui->lineEdit->show();
             break;
@@ -121,7 +122,6 @@ void memory::advanceGame()
                            + " out of " + QString::number(RNG_LENGTH);
 
             ui->lineEdit->hide();
-            ui->TimerLabel->hide();
             ui->label->setText(info);
             currentState = Display;
             ui->restartButton->show();

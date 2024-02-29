@@ -3,14 +3,16 @@
 
 #include <QWidget>
 #include <QString>
+#include <QVector>
 #include <QRandomGenerator>
 #include <QTimer>
+#include <algorithm>
 #include "readyForm.h"
 
 const int NUM_NUM = 48;
 
-const int DISPLAY_TIME = 10;
-const int DOWN_TIME = 2;
+const int DISPLAY_TIME = 3;
+const int DOWN_TIME = 30;
 const int ENTRY_TIME = 20;
 
 const int RNG_LENGTH = 5;
@@ -30,7 +32,7 @@ public:
     enum state {
         Display = 0,
         Hide,
-        Receive,
+        Test,
         StateCount
     };
     Q_ENUM(state)
@@ -54,22 +56,41 @@ private:
     QString userNum;
 
     int correct;
+    int index = 0;
 
-    int seenNum[NUM_NUM];
-    int newNum[NUM_NUM];
+    QVector<int> seenNum = {468, 300, 666, 200, 333, 244,
+                            313, 455, 202, 101, 332, 505,
+                            808, 700, 680, 900, 880, 100,
+                            111, 428, 720, 369, 360, 311,
+                            537, 579, 748, 385, 317, 472,
+                            147, 792, 816, 368, 796, 928,
+                            847, 995, 458, 692, 752, 526,
+                            852, 299, 671, 482, 713, 726};
+
+    QVector<int> newNum = {913, 212, 424, 484, 442, 144,
+                           707, 800, 699, 600, 242, 789,
+                           248, 633, 744, 525, 123, 770,
+                           464, 444, 363, 0, 120, 999,
+                           536, 641, 463, 425, 964, 421,
+                           418, 976, 719, 524, 863, 829,
+                           649, 448, 773, 129, 921, 169,
+                           724, 519, 697, 483, 869, 819};
+
     bool userAns[NUM_NUM];
 
     state currentState;
 
 signals:
     void timerFinished();
+    void stateFinished();
     void homeClicked();
 
 private slots:
     void on_homeButton_clicked();
     void endGame();
     void exitGame();
-    void advanceTimerDisplay();
+    void advanceTimer();
+    void advanceNum();
     void advanceGame();
     void on_lineEdit_returnPressed();
     void on_restartButton_clicked();
