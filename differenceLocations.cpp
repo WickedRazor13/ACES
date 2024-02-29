@@ -17,6 +17,7 @@ namespace DifferenceLocations {
 
     // ************************* Balloons ************************* //
 
+    // 8 Diffs - medium/hard
     QList<QPoint> balloonCoordList = {QPoint(27, 38),
                                       QPoint(205, 114),
                                       QPoint(75, 249),
@@ -38,6 +39,7 @@ namespace DifferenceLocations {
 
     // *********************** Banana Bread *********************** //
 
+    // 8 Diffs - hard
     QList<QPoint> bananaCoordList = {QPoint(133, 44),
                                      QPoint(39,98),
                                      QPoint(250,98),
@@ -59,6 +61,7 @@ namespace DifferenceLocations {
 
     // *************************** Beach ************************** //
 
+    // 7 Diffs - medium/hard
     QList<QPoint> beachCoordList = {QPoint(122,108),
                                     QPoint(247,199),
                                     QPoint(315,249),
@@ -77,6 +80,7 @@ namespace DifferenceLocations {
 
     // ************************* Cupcakes ************************* //
 
+    // 7 Diffs - easy
     QList<QPoint> cupcakesCoordList = {QPoint(168,83),
                                        QPoint(302,56),
                                        QPoint(174,171),
@@ -95,6 +99,7 @@ namespace DifferenceLocations {
 
     // ************************** Donut *************************** //
 
+    // 9 Diffs - medium/hard
     QList<QPoint> donutCoordList = {QPoint(287,64),
                                     QPoint(294,133),
                                     QPoint(112,153),
@@ -118,6 +123,7 @@ namespace DifferenceLocations {
 
     // *************************** Honey ************************** //
 
+    // 6 Diffs - easy/medium
     QList<QPoint> honeyCoordList = {QPoint(86,189),
                                     QPoint(174,175),
                                     QPoint(307,277),
@@ -135,6 +141,7 @@ namespace DifferenceLocations {
 
     // ************************** Laptop ************************** //
 
+    // 5 Diffs - easy
     QList<QPoint> laptopCoordList = {QPoint(38,126),
                                      QPoint(167,135),
                                      QPoint(295,241),
@@ -150,6 +157,7 @@ namespace DifferenceLocations {
 
     // ************************** Sushi *************************** //
 
+    // 9 Diffs - medium/hard but less hard than all other medium/hard
     QList<QPoint> sushiCoordList = {QPoint(226,10),
                                     QPoint(160,45),
                                     QPoint(102,151),
@@ -173,6 +181,7 @@ namespace DifferenceLocations {
 
     // *************************** Twine ************************** //
 
+    // 8 Diffs - medium/hard
     QList<QPoint> twineCoordList = {QPoint(44,1),
                                     QPoint(272,9),
                                     QPoint(103,87),
@@ -193,6 +202,7 @@ namespace DifferenceLocations {
 
     // ************************* Vegetable ************************ //
 
+    // 7 Diffs - easy/medium
     QList<QPoint> vegetableCoordList = {QPoint(63,67),
                                         QPoint(118,87),
                                         QPoint(173,148),
