@@ -175,40 +175,6 @@ QPushButton#homeButton:hover {
            </widget>
           </item>
           <item alignment="Qt::AlignHCenter">
-           <widget class="QLineEdit" name="lineEdit">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>400</width>
-              <height>150</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>400</width>
-              <height>150</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <pointsize>40</pointsize>
-              <kerning>true</kerning>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">color: slategrey;</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item alignment="Qt::AlignHCenter">
            <widget class="QPushButton" name="restartButton">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">

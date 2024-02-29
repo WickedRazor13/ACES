@@ -8,7 +8,6 @@ memory::memory(QWidget *parent) :
     ui->setupUi(this);
 
     ui->stackedWidget->setCurrentIndex(0);
-    ui->lineEdit->hide();
 
     gameTimer = new QTimer(this);
 
@@ -36,6 +35,7 @@ void memory::initGame()
 {
     ui->restartButton->hide();
 
+    // Shuffle number vectors
     QRandomGenerator rng;
     std::shuffle(seenNum.begin(), seenNum.end(), rng);
     std::shuffle(newNum.begin(), newNum.end(), rng);
@@ -69,6 +69,7 @@ void memory::advanceTimer()
 {
     if (countdownSeconds > 0) {
         countdownSeconds--;
+        qDebug() << countdownSeconds;
     }
     else {
         gameTimer->stop();
@@ -108,12 +109,10 @@ void memory::advanceGame()
             ui->label->hide();
             break;
         case Test:
-            countdownSeconds = ENTRY_TIME;
-            ui->label->setText("Enter the number.");
+            countdownSeconds = TEST_TIME;
+            ui->label->setText("Is the number new or have you seen it before?");
             ui->label->show();
-            ui->lineEdit->clear();
             gameTimer->start(TIMER_INTERVAL);
-            ui->lineEdit->show();
             break;
         case StateCount:
             // Display endgame stuff
@@ -121,7 +120,6 @@ void memory::advanceGame()
             QString info = "You matched " + QString::number(correct)
                            + " out of " + QString::number(RNG_LENGTH);
 
-            ui->lineEdit->hide();
             ui->label->setText(info);
             currentState = Display;
             ui->restartButton->show();
@@ -141,8 +139,6 @@ void memory::on_lineEdit_returnPressed()
     gameTimer->stop();
     currentState = static_cast<state>(static_cast<int>(currentState)+1);
 
-
-    userNum = ui->lineEdit->text();
     qDebug() << userNum << '\n';
 
     QString num = QString::number(displayNum);

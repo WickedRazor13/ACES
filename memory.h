@@ -13,7 +13,7 @@ const int NUM_NUM = 48;
 
 const int DISPLAY_TIME = 3;
 const int DOWN_TIME = 30;
-const int ENTRY_TIME = 20;
+const int TEST_TIME = DISPLAY_TIME * NUM_NUM;
 
 const int RNG_LENGTH = 5;
 const int RNG_MIN = 10000;
