@@ -9,6 +9,7 @@ ACES::ACES(QWidget *parent)
     this->showFullScreen();
 
     spotDiffGame = new SpotTheDiff(this);
+    MemoryGame = new memory(this);
 
     QScreen *primaryScreen = QGuiApplication::primaryScreen();
     QRect availableGeometry = primaryScreen->availableGeometry();
@@ -31,7 +32,10 @@ ACES::ACES(QWidget *parent)
     }
 
     ui->stackedWidget->addWidget(spotDiffGame);
+    ui->stackedWidget->addWidget(MemoryGame);
+
     connect(spotDiffGame, SIGNAL(homeClicked()), this, SLOT(moveHome()));
+    connect(MemoryGame, SIGNAL(homeClicked()), this, SLOT(moveHome()));
 }
 
 ACES::~ACES()
@@ -63,6 +67,7 @@ void ACES::on_quitButton_clicked()
 
 void ACES::on_memoryButton_clicked()
 {
-
+    ui->stackedWidget->setCurrentWidget(MemoryGame);
+    // Start game
 }
 

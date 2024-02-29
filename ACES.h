@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "spotTheDiff.h"
+#include "memory.h"
 
 // Window WxH
 //const int WIDTH = 1300;
@@ -32,6 +33,7 @@ private:
     Ui::ACES *ui;
 
     SpotTheDiff *spotDiffGame;
+    memory *MemoryGame;
 
 
 };
