@@ -630,6 +630,205 @@ QPushButton#exitButton:hover {
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="memoryStart">
+      <layout class="QVBoxLayout" name="verticalLayout_12">
+       <item>
+        <widget class="QFrame" name="buttonFrame_2">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>300</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>300</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_10">
+          <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+           <widget class="QLabel" name="helpLabel_2">
+            <property name="minimumSize">
+             <size>
+              <width>1000</width>
+              <height>140</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>400</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>20</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: slategrey;</string>
+            </property>
+            <property name="text">
+             <string>In a moment, you will be presented with an assortment of numbers. Try your best to remember these numbers. After studying the initial set of numbers you will be shown more numbers and you'll determine if it's a new number or if you've seen it before.</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignHCenter|Qt::AlignBottom">
+           <widget class="QPushButton" name="memoryStartButton">
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>120</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>17</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton#memoryStartButton { 
+	background-color: slategrey; 
+	border-radius: 15px;
+	color: black; 
+}
+
+QPushButton#memoryStartButton:hover { 
+	background-color: rgb(142, 158, 174); 
+	border-radius: 15px;
+	border: 2px solid slategrey;
+}
+
+</string>
+            </property>
+            <property name="text">
+             <string>Start</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="countdownFrame_2">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>380</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>400</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_11">
+          <item alignment="Qt::AlignHCenter|Qt::AlignTop">
+           <widget class="QLabel" name="infoLabel_2">
+            <property name="minimumSize">
+             <size>
+              <width>400</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>400</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>20</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: slategrey;</string>
+            </property>
+            <property name="text">
+             <string>Game starts in: </string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignHCenter|Qt::AlignTop">
+           <widget class="QLabel" name="countdownLabel_2">
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>120</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>120</width>
+              <height>120</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>80</pointsize>
+              <italic>true</italic>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: slategrey;</string>
+            </property>
+            <property name="text">
+             <string>3</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>349</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
   </layout>

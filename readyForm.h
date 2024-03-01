@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QTimer>
 
-const int TIMER_INTERVAL = 1000;
+const int TIMER_INTERVAL = 300;
 
 namespace Ui {
 class ReadyForm;
@@ -26,6 +26,7 @@ public:
 
 signals:
     void startGame();
+    void startMemory();
     void homeButtonClicked();
 
 private slots:
@@ -42,6 +43,8 @@ private slots:
 
     void on_restartButton2_clicked();
 
+    void on_memoryStartButton_clicked();
+
 private:
     Ui::ReadyForm *ui;
 
@@ -49,6 +52,7 @@ private:
     int countdownValue;
 
     bool restart = false;
+    bool memory = false;
 };
 
 #endif // READYFORM_H

@@ -68,6 +68,6 @@ void ACES::on_quitButton_clicked()
 void ACES::on_memoryButton_clicked()
 {
     ui->stackedWidget->setCurrentWidget(MemoryGame);
-    // Start game
+    MemoryGame->showForm();
 }
 

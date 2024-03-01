@@ -9,9 +9,11 @@ ReadyForm::ReadyForm(QWidget *parent) :
 
     // Hide UI elements that are conditional
     ui->countdownFrame->hide();
+    ui->countdownFrame_2->hide();
     ui->restartButton2->hide();
 
     connect(ui->startButton, SIGNAL(clicked()), this, SLOT(onStartButtonClicked()));
+    connect(ui->memoryStartButton, SIGNAL(clicked()), this, SLOT(on_memoryStartButton_clicked()));
 
     // Set up countdown timer
     countdownTimer = new QTimer(this);
@@ -69,12 +71,19 @@ void ReadyForm::updateCountdown()
     // Update the countdown labels
     ui->countdownLabel->setText(QString::number(countdownValue));
     ui->countdownLabel2->setText(QString::number(countdownValue));
+    ui->countdownLabel_2->setText(QString::number(countdownValue));
     ui->resultsLabel->setText(QString::number(countdownValue));
 
     // If countdown is done, switch to the game screen
     if (countdownValue < 0) {
         countdownTimer->stop();
-        emit startGame();
+        if (memory == true) {
+            emit startMemory();
+            memory = false;
+        }
+        else {
+            emit startGame();
+        }
         qDebug() << "start game";
     }
 
@@ -133,6 +142,18 @@ void ReadyForm::on_restartButton2_clicked()
     font.setItalic(true);
     ui->resultsLabel->setFont(font);
     ui->resultsLabel->setText(QString::number(countdownValue));
+    qDebug() << "Countdown started";
+}
+
+
+void ReadyForm::on_memoryStartButton_clicked()
+{
+    ui->countdownFrame_2->show();     // Show the countdown timer
+    memory = true;
+
+    countdownValue = 3;
+    countdownTimer->start(TIMER_INTERVAL);
+    ui->countdownLabel_2->setText(QString::number(countdownValue));
     qDebug() << "Countdown started";
 }
 

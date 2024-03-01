@@ -7,17 +7,14 @@
 #include <QRandomGenerator>
 #include <QTimer>
 #include <algorithm>
+#include <chrono>
 #include "readyForm.h"
 
 const int NUM_NUM = 48;
 
-const int DISPLAY_TIME = 3;
+const int DISPLAY_TIME = 2; // To acheive 3 seconds, 2 is used for processing logic time
 const int DOWN_TIME = 30;
 const int TEST_TIME = DISPLAY_TIME * NUM_NUM;
-
-const int RNG_LENGTH = 5;
-const int RNG_MIN = 10000;
-const int RNG_MAX = 99999;
 
 namespace Ui {
 class memory;
@@ -40,6 +37,8 @@ public:
     explicit memory(QWidget *parent = nullptr);
     ~memory();
 
+    void showForm();
+
     void initGame();
 
     void compareNums(const QString& str1, const QString& str2);
@@ -49,6 +48,7 @@ public:
 private:
     Ui::memory *ui;
 
+    ReadyForm *form;
     QTimer *gameTimer;
     int countdownSeconds;
 
@@ -87,6 +87,7 @@ signals:
 
 private slots:
     void on_homeButton_clicked();
+    void StartGame();
     void endGame();
     void exitGame();
     void advanceTimer();
