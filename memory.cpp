@@ -17,6 +17,7 @@ memory::memory(QWidget *parent) :
     connect(gameTimer, SIGNAL(timeout()), this, SLOT(advanceTimer()));
     connect(this, SIGNAL(timerFinished()), this, SLOT(advanceNum()));
     connect(this, SIGNAL(stateFinished()), this, SLOT(advanceGame()));
+    connect(this, SIGNAL(selectionMade()), this, SLOT(processSelection()));
 
     countdownSeconds = DISPLAY_TIME;
 
@@ -46,7 +47,6 @@ void memory::showForm()
 
 void memory::initGame()
 {
-    ui->restartButton->hide();
     ui->diffButtonFrame->hide();
 
     // Shuffle number vectors
@@ -59,20 +59,32 @@ void memory::initGame()
     ui->NumLabel->setText(QString::number(displayNum));
 }
 
-void memory::compareNums(const QString &str1, const QString &str2)
+void memory::combineVectors(QVector<int> &oldVec, QVector<int> &newVec)
 {
-    correct = 0;
+    for (int i = 0; i < NUM_NUM; i++) {
+        bool pickFromVec1 = QRandomGenerator::global()->bounded(2); // Returns 0 or 1
 
-    int minLength = qMin(str1.length(), str2.length());
-
-    for (int i = 0; i < minLength; ++i) {
-        if (str1.at(i) == str2.at(i)) ++correct;
+        if (pickFromVec1 && !oldVec.isEmpty()) {
+            testNum.append(oldVec.back());
+            qDebug() << oldVec.back();
+            oldVec.pop_back();    // Might need to change to pass by value so it doesn't mess with original vector
+            Ans[i] = 0;     // Set to 0 for old number
+        }
+        else if (!newVec.isEmpty()) {
+            testNum.append(newVec.back());
+            qDebug() << newVec.back();
+            newVec.pop_back();
+            Ans[i] = 1;     // Set to 1 for new number
+        }
     }
 }
 
 void memory::endGame()
 {
     gameTimer->stop();
+    currentState = Display;
+    index = 0;
+    advanceGame();
 }
 
 void memory::exitGame()
@@ -84,7 +96,7 @@ void memory::advanceTimer()
 {
     if (countdownSeconds > 0) {
         countdownSeconds--;
-        qDebug() << countdownSeconds;
+        //qDebug() << countdownSeconds;
     }
     else {
         gameTimer->stop();
@@ -108,8 +120,6 @@ void memory::advanceNum()
     }
 }
 
-// TODO: Advance TEST method - should be tied to button clicks
-
 void memory::advanceGame()
 {
     switch(currentState) {
@@ -118,6 +128,7 @@ void memory::advanceGame()
             ui->label->setText("Study the numbers below.");
             countdownSeconds = DISPLAY_TIME;
             gameTimer->start(TIMER_INTERVAL);
+            index = 0;
             ui->NumLabel->show();
             break;
         case Hide:
@@ -129,22 +140,25 @@ void memory::advanceGame()
         case Test:
             countdownSeconds = TEST_TIME;
             ui->label->setText("Is the number new or have you seen it before?");
-            ui->NumLabel->show();
             ui->diffButtonFrame->show();
-
-            // Start and advance game
-            gameTimer->start(TIMER_INTERVAL);
+            index = 0;
+            combineVectors(seenNum, newNum);
+            displayNum = testNum[index];
+            ui->NumLabel->setText(QString::number(displayNum));
+            ui->NumLabel->show();
+            //gameTimer->start(TIMER_INTERVAL);
+            // Display timer at bottom // will need to reimplement timer display func
             break;
-        case StateCount:
+        case End:
             // Display endgame stuff
             // Reset cycle
-            QString info = "You matched " + QString::number(correct)
-                           + " out of " + QString::number(5);
+            QString info = "You got " + QString::number(correct)
+                           + " out of " + QString::number(NUM_NUM);
 
             ui->label->setText(info);
             currentState = Display;
-            ui->restartButton->show();
-
+            ui->diffButtonFrame->hide();
+            ui->NumLabel->hide();
     }
 }
 
@@ -158,6 +172,8 @@ void memory::StartGame()
 {
     initGame();
     ui->stackedWidget->setCurrentIndex(0);
+    index = 0;
+    correct = 0;
     gameTimer->start(TIMER_INTERVAL);
 
     // Remove old instance of the ready form
@@ -166,23 +182,46 @@ void memory::StartGame()
 }
 
 
-void memory::on_lineEdit_returnPressed()
+void memory::on_oldButton_clicked()
 {
-    gameTimer->stop();
-    currentState = static_cast<state>(static_cast<int>(currentState)+1);
-
-    qDebug() << userNum << '\n';
-
-    QString num = QString::number(displayNum);
-
-    compareNums(num, userNum);
-
-    emit timerFinished();
+    selection = 0;  // Old selection made
+    emit selectionMade();
 }
 
 
-void memory::on_restartButton_clicked()
+void memory::on_newButton_clicked()
 {
-    emit timerFinished();
+    selection = 1;  // New selection made
+    emit selectionMade();
 }
+
+void memory::processSelection()
+{
+    if (index < NUM_NUM) {
+        qDebug() << testNum[index];
+        qDebug() << "New?: " << Ans[index];
+        qDebug() << "Selection: " << selection;
+
+        if (selection == Ans[index]) {   // Compare user guess to actual value
+        userAns[index] = 1;     // User made correct selection
+        correct++;
+        qDebug() << "correct\n";
+        }
+        else {
+        userAns[index] = 0;
+        qDebug() << "incorrect\n";
+        }
+
+        // Update number display
+        displayNum = testNum[index++];
+        ui->NumLabel->setText(QString::number(displayNum));
+    }
+    else {
+        currentState = End;
+        emit stateFinished();
+    }
+}
+
+
+
 

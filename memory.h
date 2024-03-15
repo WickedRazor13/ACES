@@ -30,7 +30,7 @@ public:
         Display = 0,
         Hide,
         Test,
-        StateCount
+        End
     };
     Q_ENUM(state)
 
@@ -41,9 +41,7 @@ public:
 
     void initGame();
 
-    void compareNums(const QString& str1, const QString& str2);
-
-
+    void combineVectors(QVector<int>& vec1, QVector<int>& vec2);
 
 private:
     Ui::memory *ui;
@@ -55,7 +53,7 @@ private:
     int displayNum;
     QString userNum;
 
-    int correct;
+    int correct = 0;
     int index = 0;
 
     QVector<int> seenNum = {468, 300, 666, 200, 333, 244,
@@ -76,7 +74,10 @@ private:
                            649, 448, 773, 129, 921, 169,
                            724, 519, 697, 483, 869, 819};
 
+    QVector<int> testNum;
     bool userAns[NUM_NUM];
+    bool Ans[NUM_NUM];
+    bool selection; // 0 = old, 1 = new
 
     state currentState;
 
@@ -84,6 +85,7 @@ signals:
     void timerFinished();
     void stateFinished();
     void homeClicked();
+    void selectionMade();
 
 private slots:
     void on_homeButton_clicked();
@@ -93,8 +95,9 @@ private slots:
     void advanceTimer();
     void advanceNum();
     void advanceGame();
-    void on_lineEdit_returnPressed();
-    void on_restartButton_clicked();
+    void on_oldButton_clicked();
+    void on_newButton_clicked();
+    void processSelection();
 };
 
 #endif // MEMORY_H
