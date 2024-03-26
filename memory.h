@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <chrono>
 #include "readyForm.h"
+#include "measurementModule.h"
 
 const int NUM_NUM = 48;
 
@@ -45,6 +46,8 @@ public:
 
 private:
     Ui::memory *ui;
+
+    MeasurementModule *measurement;
 
     ReadyForm *form;
     QTimer *gameTimer;
@@ -85,6 +88,7 @@ signals:
     void timerFinished();
     void stateFinished();
     void homeClicked();
+    void newNumDisplayed();
     void selectionMade();
 
 private slots:

@@ -320,6 +320,31 @@ QPushButton#newButton:hover {
             </property>
            </spacer>
           </item>
+          <item alignment="Qt::AlignHCenter">
+           <widget class="QLabel" name="TimerLabel">
+            <property name="maximumSize">
+             <size>
+              <width>130</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>36</pointsize>
+              <kerning>true</kerning>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: slategrey;</string>
+            </property>
+            <property name="text">
+             <string>0:00</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>

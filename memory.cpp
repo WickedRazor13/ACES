@@ -6,6 +6,7 @@ memory::memory(QWidget *parent) :
     ui(new Ui::memory)
 {
     ui->setupUi(this);
+    measurement = new MeasurementModule(this, 1);   // 1 Sets game type to memory
 
     ui->stackedWidget->setCurrentIndex(0);
 
@@ -48,6 +49,7 @@ void memory::showForm()
 void memory::initGame()
 {
     ui->diffButtonFrame->hide();
+    ui->TimerLabel->hide();
 
     // Shuffle number vectors
     unsigned int seed = std::chrono::system_clock::now().time_since_epoch().count();
@@ -66,13 +68,13 @@ void memory::combineVectors(QVector<int> &oldVec, QVector<int> &newVec)
 
         if (pickFromVec1 && !oldVec.isEmpty()) {
             testNum.append(oldVec.back());
-            qDebug() << oldVec.back();
+            //qDebug() << oldVec.back();
             oldVec.pop_back();    // Might need to change to pass by value so it doesn't mess with original vector
             Ans[i] = 0;     // Set to 0 for old number
         }
         else if (!newVec.isEmpty()) {
             testNum.append(newVec.back());
-            qDebug() << newVec.back();
+            //qDebug() << newVec.back();
             newVec.pop_back();
             Ans[i] = 1;     // Set to 1 for new number
         }
@@ -96,7 +98,21 @@ void memory::advanceTimer()
 {
     if (countdownSeconds > 0) {
         countdownSeconds--;
+
+        int minutes = countdownSeconds / 60;
+        int remainingSeconds = countdownSeconds % 60;
+
+        QString timeString = QString("%1:%2")
+                                 .arg(minutes, 2, 10, QLatin1Char('0'))
+                                 .arg(remainingSeconds, 2, 10, QLatin1Char('0'));
+
+        ui->TimerLabel->setText(timeString);
         //qDebug() << countdownSeconds;
+    }
+    else if (currentState == Test) {
+        gameTimer->stop();
+        currentState = End;
+        emit stateFinished();
     }
     else {
         gameTimer->stop();
@@ -109,7 +125,7 @@ void memory::advanceNum()
 {
     if (index < NUM_NUM) {
         displayNum = seenNum[index++];
-        qDebug() << index;
+        //qDebug() << index;
         ui->NumLabel->setText(QString::number(displayNum));
         countdownSeconds = DISPLAY_TIME;
         gameTimer->start(TIMER_INTERVAL);
@@ -146,8 +162,11 @@ void memory::advanceGame()
             displayNum = testNum[index];
             ui->NumLabel->setText(QString::number(displayNum));
             ui->NumLabel->show();
-            //gameTimer->start(TIMER_INTERVAL);
-            // Display timer at bottom // will need to reimplement timer display func
+            ui->TimerLabel->show();
+            gameTimer->start(TIMER_INTERVAL);
+            measurement->startCount();
+            measurement->logEvent(MeasurementModule::display);
+            index++;
             break;
         case End:
             // Display endgame stuff
@@ -175,6 +194,7 @@ void memory::StartGame()
     index = 0;
     correct = 0;
     gameTimer->start(TIMER_INTERVAL);
+    measurement->logEvent(MeasurementModule::eventType::Meminfo);
 
     // Remove old instance of the ready form
     ui->stackedWidget->removeWidget(form);
@@ -198,25 +218,40 @@ void memory::on_newButton_clicked()
 void memory::processSelection()
 {
     if (index < NUM_NUM) {
-        qDebug() << testNum[index];
-        qDebug() << "New?: " << Ans[index];
-        qDebug() << "Selection: " << selection;
+        //qDebug() << testNum[index];
+        //qDebug() << "New?: " << Ans[index];
+        //qDebug() << "Selection: " << selection;
 
-        if (selection == Ans[index]) {   // Compare user guess to actual value
+        if (selection == Ans[index-1]) {   // Compare user guess to actual value
         userAns[index] = 1;     // User made correct selection
         correct++;
-        qDebug() << "correct\n";
+        //qDebug() << "correct\n";
+        measurement->logEvent(MeasurementModule::eventType::correct);
         }
         else {
-        userAns[index] = 0;
-        qDebug() << "incorrect\n";
+        userAns[index-1] = 0;
+        //qDebug() << "incorrect\n";
+        measurement->logEvent(MeasurementModule::eventType::incorrect);
         }
 
         // Update number display
         displayNum = testNum[index++];
         ui->NumLabel->setText(QString::number(displayNum));
+        measurement->logEvent(MeasurementModule::eventType::display);
     }
     else {
+        if (selection == Ans[index-1]) {   // Compare user guess to actual value
+        userAns[index] = 1;     // User made correct selection
+        correct++;
+        //qDebug() << "correct\n";
+        measurement->logEvent(MeasurementModule::eventType::correct);
+        }
+        else {
+        userAns[index-1] = 0;
+        //qDebug() << "incorrect\n";
+        measurement->logEvent(MeasurementModule::eventType::incorrect);
+        }
+
         currentState = End;
         emit stateFinished();
     }

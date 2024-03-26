@@ -4,7 +4,7 @@
 #include <QWidget>
 #include <QTimer>
 
-const int TIMER_INTERVAL = 300;
+const int TIMER_INTERVAL = 100;
 
 namespace Ui {
 class ReadyForm;

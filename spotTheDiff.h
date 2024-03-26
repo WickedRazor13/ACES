@@ -164,8 +164,6 @@ signals:
     void countdownFinished();
     void gameStarted();
     void gameFinished();
-    //void sessionComplete();   // For when all images have been exhausted
-
     void differenceFound();
 
 private slots:

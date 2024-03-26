@@ -8,12 +8,12 @@ SpotTheDiff::SpotTheDiff(QWidget *parent) :
     ui->setupUi(this);
 
     gameTimer = new QTimer(this);
-    measurement = new MeasurementModule(this);
+    measurement = new MeasurementModule(this, 0);   // 0 sets game type to Spot the Diff
 
     connect(gameTimer, SIGNAL(timeout()), this, SLOT(advanceTimerDisplay()));
     connect(this, SIGNAL(gameFinished()), this, SLOT(endGame()));
     connect(this, SIGNAL(gameStarted()), measurement, SLOT(startCount()));
-    connect(this, SIGNAL(gameStarted()), measurement, SLOT(logEvent()));
+    //connect(this, SIGNAL(gameStarted()), measurement, SLOT(logEvent()));
     connect(this, SIGNAL(differenceFound()), measurement, SLOT(logEvent()));
 
     // Install event filters to prevent scrolling on images
@@ -218,6 +218,7 @@ void SpotTheDiff::connectScenes()
     for (DifferenceItem* diffItem : differenceItems) {
             connect(diffItem, &DifferenceItem::differenceClicked, this, &SpotTheDiff::highlightCorrespondingItem);
     }
+    // TODO connect a scene click to method for incorrect click output
 
     connect(this, SIGNAL(differenceFound()), this, SLOT(advanceDifferencesDisplay()));
 }
@@ -226,12 +227,13 @@ void SpotTheDiff::highlightCorrespondingItem() {
     // Identify the clicked item
     DifferenceItem* clickedItem = qobject_cast<DifferenceItem*>(sender());
 
-    if (!clickedItem)
+    if (!clickedItem) {
             return;
+    }
 
     if (clickedItem->highlighted == false) {
             emit differenceFound();
-
+            measurement->logEvent(MeasurementModule::correct);
     }
 
     // Highlight the corresponding item in the other scene
@@ -364,6 +366,7 @@ void SpotTheDiff::StartGame()
     gameTimer->start(TIMER_INTERVAL);
 
     emit gameStarted();
+    measurement->logEvent(MeasurementModule::STDinfo);
 
 }
 
@@ -375,7 +378,8 @@ void SpotTheDiff::advanceDifferencesDisplay()
     updateItemLabels();
 
     if (itemsRemaining == 0) {
-            emit gameFinished();
+        measurement->logEvent(MeasurementModule::eventType::STDinfo);
+        emit gameFinished();
             //return;
     }
 
@@ -397,6 +401,7 @@ void SpotTheDiff::advanceTimerDisplay()
     }
     else {
             gameTimer->stop();
+            measurement->logEvent(MeasurementModule::eventType::STDinfo);
             emit gameFinished();
     }
 }
