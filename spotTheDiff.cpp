@@ -16,6 +16,9 @@ SpotTheDiff::SpotTheDiff(QWidget *parent) :
     //connect(this, SIGNAL(gameStarted()), measurement, SLOT(logEvent()));
     connect(this, SIGNAL(differenceFound()), measurement, SLOT(logEvent()));
 
+    connect(&imageScene, &ImageScene::clicked, this, &SpotTheDiff::sceneClicked);
+    connect(&diffScene, &ImageScene::clicked, this, &SpotTheDiff::sceneClicked);
+
     // Install event filters to prevent scrolling on images
     ui->imageView->viewport()->installEventFilter(this);
     ui->diffView->viewport()->installEventFilter(this);
@@ -327,6 +330,11 @@ void SpotTheDiff::exitGame()
 {
     delete form;
     emit homeClicked();
+}
+
+void SpotTheDiff::sceneClicked()
+{
+    measurement->logEvent(MeasurementModule::incorrect);
 }
 
 void SpotTheDiff::StartGame()

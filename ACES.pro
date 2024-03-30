@@ -12,6 +12,7 @@ SOURCES += \
     ACES.cpp \
     differenceItem.cpp \
     differenceLocations.cpp \
+    imagescene.cpp \
     main.cpp \
     measurementModule.cpp \
     memory.cpp \
@@ -22,6 +23,7 @@ HEADERS += \
     ACES.h \
     differenceItem.h \
     differenceLocations.h \
+    imagescene.h \
     measurementModule.h \
     memory.h \
     readyForm.h \

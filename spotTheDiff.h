@@ -17,6 +17,7 @@
 #include "differenceItem.h"
 #include "readyForm.h"
 #include "measurementModule.h"
+#include "imagescene.h"
 
 // Image dimensions - image is 350 x 467 px at 100%
 const int IMAGE_WIDTH = 350;
@@ -136,8 +137,10 @@ private:
     int countdownSeconds;
 
     // Graphics Scenes
-    QGraphicsScene imageScene;
-    QGraphicsScene diffScene;
+    //QGraphicsScene imageScene;
+    //QGraphicsScene diffScene;
+    ImageScene imageScene;
+    ImageScene diffScene;
 
     // Objects to track differences
     QVector<DifferenceItem*> differenceItems;   // Dynamic vector for allocating differenceItems unique to each image
@@ -170,7 +173,7 @@ private slots:
     void StartGame();
     void endGame();
     void exitGame();
-    //void endSession();    // For when all images have been exhausted
+    void sceneClicked();
 
     // GUI advancement methods
     void advanceDifferencesDisplay();
