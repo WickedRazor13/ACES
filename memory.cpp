@@ -186,6 +186,7 @@ void memory::advanceGame()
             currentState = Display;
             ui->diffButtonFrame->hide();
             ui->NumLabel->hide();
+            measurement->logEvent(MeasurementModule::Memend, ACESBLUE::blue);
     }
 }
 
@@ -202,7 +203,7 @@ void memory::StartGame()
     index = 0;
     correct = 0;
     gameTimer->start(TIMER_INTERVAL);
-    measurement->logEvent(MeasurementModule::eventType::Meminfo, ACESBLUE::blue);
+    measurement->logEvent(MeasurementModule::eventType::Memstart, ACESBLUE::blue);
 
     // Remove old instance of the ready form
     ui->stackedWidget->removeWidget(form);

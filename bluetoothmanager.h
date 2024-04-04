@@ -8,6 +8,8 @@
 #include <QtBluetooth/qbluetoothlocaldevice.h>
 #include <QtBluetooth/qbluetoothserver.h>
 
+#define CONTROLLER_MAC "0C:8B:95:94:B4:96"
+
 class BluetoothManager : public QObject
 {
     Q_OBJECT

@@ -17,8 +17,10 @@ public:
         display = 0,
         correct,
         incorrect,
-        STDinfo,
-        Meminfo
+        STDstart,
+        STDend,
+        Memstart,
+        Memend
     };
     Q_ENUM(eventType)
 

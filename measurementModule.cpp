@@ -36,12 +36,17 @@ void MeasurementModule::logEvent(eventType t, BluetoothManager *b)
     qint64 totalTime = gameStartTime.msecsTo(currentTime);
     QString currentTimeString = currentTime.toString("hh:mm:ss.zzz");
 
-    QString event = eventToString(t);
+    QString event = currentTimeString + ", "
+                    + QString::number(timeSinceLastEvent) + ", "
+                    + QString::number(totalTime) + ", "
+                    + eventToString(t);
 
     // Write the time since the last event to the CSV file
-    writeCSV(currentTimeString + ", " + QString::number(timeSinceLastEvent) + ", " + QString::number(totalTime) + ", " + event);
-    //QByteArray a;ldkfa;lk
-    b->sendData("event"); // Update to send QByteArray
+
+    //writeCSV(currentTimeString + ", " + QString::number(timeSinceLastEvent) + ", " + QString::number(totalTime) + ", " + event);
+    writeCSV(event);
+    QByteArray info = event.toUtf8();
+    b->sendData(info);  // Send over bluetooth
 }
 
 void MeasurementModule::startCount()
@@ -63,8 +68,10 @@ QString MeasurementModule::eventToString(eventType t)
         {display, "display"},
         {correct, "correct"},
         {incorrect, "incorrect"},
-        {STDinfo, "STDinfo"},
-        {Meminfo, "Meminfo"}
+        {STDstart, "STDstart"},
+        {STDend, "STDend"},
+        {Memstart, "Memstart"},
+        {Memend, "Memend"}
     };
 
     if (enumMap.contains(t)) {

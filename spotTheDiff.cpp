@@ -330,7 +330,7 @@ void SpotTheDiff::endGame()
     ui->stackedWidget->addWidget(form);
     ui->stackedWidget->setCurrentWidget(form);
 
-    measurement->logEvent(MeasurementModule::eventType::STDinfo, ACESBLUE::blue);
+    measurement->logEvent(MeasurementModule::eventType::STDend, ACESBLUE::blue);
 
 }
 
@@ -382,7 +382,7 @@ void SpotTheDiff::StartGame()
     gameTimer->start(TIMER_INTERVAL);
 
     emit gameStarted();
-    measurement->logEvent(MeasurementModule::STDinfo, ACESBLUE::blue);
+    measurement->logEvent(MeasurementModule::STDstart, ACESBLUE::blue);
 
 }
 

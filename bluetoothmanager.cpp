@@ -99,9 +99,8 @@ void BluetoothManager::startScan()
 void BluetoothManager::deviceDiscovered(const QBluetoothDeviceInfo &device)
 {
     qInfo() << "New Device Found: " << device.name() << " ( " << device.address().toString() << " )";
-    //if (device.name() == "OnePlus 11 5G")
-    if (device.name() == "CC_Classic")  //TODO update to find by address as variable
-    //if (device.address() == "0C:8B:95:94:B4:96")
+    //if (device.name() == "CC_Classic")
+    if (device.address().toString() == CONTROLLER_MAC)
     {
         discoveryAgent->stop();
         QString sppUuid = QStringLiteral("00001101-0000-1000-8000-00805F9B34FB");
