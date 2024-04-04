@@ -1,6 +1,8 @@
 #include "ACES.h"
 #include "ui_ACES.h"
 
+BluetoothManager *ACESBLUE::blue = nullptr;
+
 ACES::ACES(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::ACES)
@@ -10,6 +12,7 @@ ACES::ACES(QWidget *parent)
 
     spotDiffGame = new SpotTheDiff(this);
     MemoryGame = new memory(this);
+    ACESBLUE::blue = new BluetoothManager(this);
 
     QScreen *primaryScreen = QGuiApplication::primaryScreen();
     QRect availableGeometry = primaryScreen->availableGeometry();

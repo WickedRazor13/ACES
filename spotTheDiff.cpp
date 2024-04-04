@@ -1,6 +1,14 @@
 #include "spotTheDiff.h"
 #include "ui_spotTheDiff.h"
 
+// Forward declaration of BluetoothManager
+//class BluetoothManager;
+
+// Forward declaration of ACESBLUE namespace
+namespace ACESBLUE {
+extern BluetoothManager *blue;
+}
+
 SpotTheDiff::SpotTheDiff(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::SpotTheDiff)
@@ -14,7 +22,7 @@ SpotTheDiff::SpotTheDiff(QWidget *parent) :
     connect(this, SIGNAL(gameFinished()), this, SLOT(endGame()));
     connect(this, SIGNAL(gameStarted()), measurement, SLOT(startCount()));
     //connect(this, SIGNAL(gameStarted()), measurement, SLOT(logEvent()));
-    connect(this, SIGNAL(differenceFound()), measurement, SLOT(logEvent()));
+    //connect(this, SIGNAL(differenceFound()), measurement, SLOT(logEvent()));
 
     connect(&imageScene, &ImageScene::clicked, this, &SpotTheDiff::sceneClicked);
     connect(&diffScene, &ImageScene::clicked, this, &SpotTheDiff::sceneClicked);
@@ -221,7 +229,6 @@ void SpotTheDiff::connectScenes()
     for (DifferenceItem* diffItem : differenceItems) {
             connect(diffItem, &DifferenceItem::differenceClicked, this, &SpotTheDiff::highlightCorrespondingItem);
     }
-    // TODO connect a scene click to method for incorrect click output
 
     connect(this, SIGNAL(differenceFound()), this, SLOT(advanceDifferencesDisplay()));
 }
@@ -235,8 +242,8 @@ void SpotTheDiff::highlightCorrespondingItem() {
     }
 
     if (clickedItem->highlighted == false) {
+            measurement->logEvent(MeasurementModule::correct, ACESBLUE::blue);
             emit differenceFound();
-            measurement->logEvent(MeasurementModule::correct);
     }
 
     // Highlight the corresponding item in the other scene
@@ -293,7 +300,6 @@ void SpotTheDiff::endGame()
     gameTimer->stop();
     qDebug() << "Game Over";
 
-
     form = new ReadyForm(this);
     form->changeScreen(2);
 
@@ -324,6 +330,8 @@ void SpotTheDiff::endGame()
     ui->stackedWidget->addWidget(form);
     ui->stackedWidget->setCurrentWidget(form);
 
+    measurement->logEvent(MeasurementModule::eventType::STDinfo, ACESBLUE::blue);
+
 }
 
 void SpotTheDiff::exitGame()
@@ -334,7 +342,7 @@ void SpotTheDiff::exitGame()
 
 void SpotTheDiff::sceneClicked()
 {
-    measurement->logEvent(MeasurementModule::incorrect);
+    measurement->logEvent(MeasurementModule::incorrect, ACESBLUE::blue);
 }
 
 void SpotTheDiff::StartGame()
@@ -374,7 +382,7 @@ void SpotTheDiff::StartGame()
     gameTimer->start(TIMER_INTERVAL);
 
     emit gameStarted();
-    measurement->logEvent(MeasurementModule::STDinfo);
+    measurement->logEvent(MeasurementModule::STDinfo, ACESBLUE::blue);
 
 }
 
@@ -386,9 +394,7 @@ void SpotTheDiff::advanceDifferencesDisplay()
     updateItemLabels();
 
     if (itemsRemaining == 0) {
-        measurement->logEvent(MeasurementModule::eventType::STDinfo);
         emit gameFinished();
-            //return;
     }
 
 }
@@ -409,7 +415,6 @@ void SpotTheDiff::advanceTimerDisplay()
     }
     else {
             gameTimer->stop();
-            measurement->logEvent(MeasurementModule::eventType::STDinfo);
             emit gameFinished();
     }
 }

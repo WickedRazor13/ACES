@@ -1,6 +1,14 @@
 #include "memory.h"
 #include "ui_memory.h"
 
+// Forward declaration of BluetoothManager
+//class BluetoothManager;
+
+// Forward declaration of ACESBLUE namespace
+namespace ACESBLUE {
+extern BluetoothManager *blue;
+}
+
 memory::memory(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::memory)
@@ -165,7 +173,7 @@ void memory::advanceGame()
             ui->TimerLabel->show();
             gameTimer->start(TIMER_INTERVAL);
             measurement->startCount();
-            measurement->logEvent(MeasurementModule::display);
+            measurement->logEvent(MeasurementModule::display, ACESBLUE::blue);
             index++;
             break;
         case End:
@@ -194,7 +202,7 @@ void memory::StartGame()
     index = 0;
     correct = 0;
     gameTimer->start(TIMER_INTERVAL);
-    measurement->logEvent(MeasurementModule::eventType::Meminfo);
+    measurement->logEvent(MeasurementModule::eventType::Meminfo, ACESBLUE::blue);
 
     // Remove old instance of the ready form
     ui->stackedWidget->removeWidget(form);
@@ -226,30 +234,30 @@ void memory::processSelection()
         userAns[index] = 1;     // User made correct selection
         correct++;
         //qDebug() << "correct\n";
-        measurement->logEvent(MeasurementModule::eventType::correct);
+        measurement->logEvent(MeasurementModule::eventType::correct, ACESBLUE::blue);
         }
         else {
         userAns[index-1] = 0;
         //qDebug() << "incorrect\n";
-        measurement->logEvent(MeasurementModule::eventType::incorrect);
+        measurement->logEvent(MeasurementModule::eventType::incorrect, ACESBLUE::blue);
         }
 
         // Update number display
         displayNum = testNum[index++];
         ui->NumLabel->setText(QString::number(displayNum));
-        measurement->logEvent(MeasurementModule::eventType::display);
+        measurement->logEvent(MeasurementModule::eventType::display, ACESBLUE::blue);
     }
     else {
         if (selection == Ans[index-1]) {   // Compare user guess to actual value
         userAns[index] = 1;     // User made correct selection
         correct++;
         //qDebug() << "correct\n";
-        measurement->logEvent(MeasurementModule::eventType::correct);
+        measurement->logEvent(MeasurementModule::eventType::correct, ACESBLUE::blue);
         }
         else {
         userAns[index-1] = 0;
         //qDebug() << "incorrect\n";
-        measurement->logEvent(MeasurementModule::eventType::incorrect);
+        measurement->logEvent(MeasurementModule::eventType::incorrect, ACESBLUE::blue);
         }
 
         currentState = End;

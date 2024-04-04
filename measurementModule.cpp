@@ -23,7 +23,7 @@ MeasurementModule::~MeasurementModule()
     logFile.close();
 }
 
-void MeasurementModule::logEvent(eventType t)
+void MeasurementModule::logEvent(eventType t, BluetoothManager *b)
 {
     // Calculate the time since the last event
     QDateTime currentTime = QDateTime::currentDateTime();
@@ -40,6 +40,8 @@ void MeasurementModule::logEvent(eventType t)
 
     // Write the time since the last event to the CSV file
     writeCSV(currentTimeString + ", " + QString::number(timeSinceLastEvent) + ", " + QString::number(totalTime) + ", " + event);
+    //QByteArray a;ldkfa;lk
+    b->sendData("event"); // Update to send QByteArray
 }
 
 void MeasurementModule::startCount()

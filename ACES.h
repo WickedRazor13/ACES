@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "spotTheDiff.h"
 #include "memory.h"
+#include "bluetoothmanager.h"
 
 // Window WxH
 //const int WIDTH = 1300;
@@ -13,6 +14,12 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class ACES; }
 QT_END_NAMESPACE
 
+QT_BEGIN_INCLUDE_NAMESPACE
+namespace ACESBLUE {
+    extern BluetoothManager *blue;
+}
+QT_END_NAMESPACE
+
 class ACES : public QWidget
 {
     Q_OBJECT
@@ -20,6 +27,8 @@ class ACES : public QWidget
 public:
     ACES(QWidget *parent = nullptr);
     ~ACES();
+
+    //BluetoothManager *blue;
 
 private slots:
     void on_spotDiffButton_clicked();

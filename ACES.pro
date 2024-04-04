@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui bluetooth
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     ACES.cpp \
+    bluetoothmanager.cpp \
     differenceItem.cpp \
     differenceLocations.cpp \
     imagescene.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
 
 HEADERS += \
     ACES.h \
+    bluetoothmanager.h \
     differenceItem.h \
     differenceLocations.h \
     imagescene.h \

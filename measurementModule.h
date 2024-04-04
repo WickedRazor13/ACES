@@ -6,6 +6,7 @@
 #include <QTextStream>
 #include <QDateTime>
 #include <QMap>
+#include "bluetoothmanager.h"
 
 class MeasurementModule : public QObject
 {
@@ -28,7 +29,7 @@ public:
     QString eventToString(eventType t);
 
 public slots:
-    void logEvent(eventType t);
+    void logEvent(eventType t, BluetoothManager *b);
     void startCount();
 
 signals:
