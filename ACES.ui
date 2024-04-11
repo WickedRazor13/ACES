@@ -131,13 +131,13 @@
          <property name="minimumSize">
           <size>
            <width>300</width>
-           <height>150</height>
+           <height>180</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>300</width>
-           <height>150</height>
+           <height>180</height>
           </size>
          </property>
          <property name="frameShape">
@@ -234,6 +234,45 @@ QPushButton#memoryButton:hover {
             </property>
             <property name="text">
              <string>Memory</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="tetrisButton">
+            <property name="minimumSize">
+             <size>
+              <width>260</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>420</width>
+              <height>32</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>17</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton#tetrisButton { 
+	background-color: slategrey; 
+	border-radius: 15px;
+	color: black; 
+}
+
+QPushButton#tetrisButton:hover { 
+	background-color: rgb(142, 158, 174); 
+	border-radius: 15px;
+	border: 2px solid slategrey;
+}
+
+</string>
+            </property>
+            <property name="text">
+             <string>Tetris</string>
             </property>
            </widget>
           </item>

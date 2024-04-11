@@ -9,7 +9,9 @@ MeasurementModule::MeasurementModule(QObject *parent, int game)
     else if (game == 1) {
         logFile.setFileName("Mem_log.csv");
     }
-    //logFile.setFileName("event_log.csv");
+    else if (game == 2) {
+        logFile.setFileName("Tet_log.csv");
+    }
     logFile.open(QIODevice::WriteOnly | QIODevice::Text);
 
     writeCSV("TimeStamp, TimeSinceLastEvent (ms), TotalTime (ms), EventType");
@@ -65,13 +67,19 @@ void MeasurementModule::writeCSV(const QString& data)
 QString MeasurementModule::eventToString(eventType t)
 {
     static QMap<eventType, QString> enumMap = {
-        {display, "display"},
-        {correct, "correct"},
-        {incorrect, "incorrect"},
+        {Correct, "Correct"},
+        {Incorrect, "Incorrect"},
         {STDstart, "STDstart"},
         {STDend, "STDend"},
-        {Memstart, "Memstart"},
-        {Memend, "Memend"}
+        {MemStart, "MemStart"},
+        {MemEnd, "MemEnd"},
+        {MemBreak, "MemBreak"},
+        {Display, "Display"},
+        {TetStart, "TetStart"},
+        {TetEnd, "TetEnd"},
+        {TetNewPiece, "TetNewPiece"},
+        {TetPlace, "TetPlace"},
+        {TetRowClear, "TetRowClear"}
     };
 
     if (enumMap.contains(t)) {

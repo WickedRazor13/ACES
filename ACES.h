@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "spotTheDiff.h"
 #include "memory.h"
+#include "widget.h"
 #include "bluetoothmanager.h"
 
 // Window WxH
@@ -38,11 +39,14 @@ private slots:
 
     void on_memoryButton_clicked();
 
+    void on_tetrisButton_clicked();
+
 private:
     Ui::ACES *ui;
 
     SpotTheDiff *spotDiffGame;
     memory *MemoryGame;
+    Widget *Tetrizz;
 
 
 };

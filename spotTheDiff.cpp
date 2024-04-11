@@ -242,7 +242,7 @@ void SpotTheDiff::highlightCorrespondingItem() {
     }
 
     if (clickedItem->highlighted == false) {
-            measurement->logEvent(MeasurementModule::correct, ACESBLUE::blue);
+            measurement->logEvent(MeasurementModule::Correct, ACESBLUE::blue);
             emit differenceFound();
     }
 
@@ -342,7 +342,7 @@ void SpotTheDiff::exitGame()
 
 void SpotTheDiff::sceneClicked()
 {
-    measurement->logEvent(MeasurementModule::incorrect, ACESBLUE::blue);
+    measurement->logEvent(MeasurementModule::Incorrect, ACESBLUE::blue);
 }
 
 void SpotTheDiff::StartGame()

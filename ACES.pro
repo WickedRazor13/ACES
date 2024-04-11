@@ -18,7 +18,8 @@ SOURCES += \
     measurementModule.cpp \
     memory.cpp \
     readyForm.cpp \
-    spotTheDiff.cpp
+    spotTheDiff.cpp \
+    widget.cpp
 
 HEADERS += \
     ACES.h \
@@ -29,13 +30,15 @@ HEADERS += \
     measurementModule.h \
     memory.h \
     readyForm.h \
-    spotTheDiff.h
+    spotTheDiff.h \
+    widget.h
 
 FORMS += \
     ACES.ui \
     memory.ui \
     readyForm.ui \
-    spotTheDiff.ui
+    spotTheDiff.ui \
+    widget.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

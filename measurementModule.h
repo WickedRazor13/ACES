@@ -14,13 +14,19 @@ class MeasurementModule : public QObject
 public:
 
     enum eventType {
-        display = 0,
-        correct,
-        incorrect,
+        Correct = 0,
+        Incorrect,
         STDstart,
         STDend,
-        Memstart,
-        Memend
+        MemStart,
+        MemEnd,
+        MemBreak,
+        Display,
+        TetStart,
+        TetEnd,
+        TetNewPiece,
+        TetPlace,
+        TetRowClear
     };
     Q_ENUM(eventType)
 
@@ -42,7 +48,7 @@ private:
     QDateTime lastEventTime;
     QDateTime gameStartTime;
 
-    int game; // 0 = STD, 1 = memory
+    int game; // 0 = STD, 1 = memory, 2 = Tetris
 };
 
 #endif // MEASUREMENTMODULE_H

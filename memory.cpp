@@ -1,9 +1,6 @@
 #include "memory.h"
 #include "ui_memory.h"
 
-// Forward declaration of BluetoothManager
-//class BluetoothManager;
-
 // Forward declaration of ACESBLUE namespace
 namespace ACESBLUE {
 extern BluetoothManager *blue;
@@ -137,6 +134,7 @@ void memory::advanceNum()
         ui->NumLabel->setText(QString::number(displayNum));
         countdownSeconds = DISPLAY_TIME;
         gameTimer->start(TIMER_INTERVAL);
+        measurement->logEvent(MeasurementModule::Display, ACESBLUE::blue);
     }
     else {
         currentState = static_cast<state>(static_cast<int>(currentState)+1);
@@ -160,6 +158,7 @@ void memory::advanceGame()
             gameTimer->start(TIMER_INTERVAL);
             ui->NumLabel->hide();
             ui->label->setText("Have a short break :)");
+            measurement->logEvent(MeasurementModule::MemBreak, ACESBLUE::blue);
             break;
         case Test:
             countdownSeconds = TEST_TIME;
@@ -173,7 +172,7 @@ void memory::advanceGame()
             ui->TimerLabel->show();
             gameTimer->start(TIMER_INTERVAL);
             measurement->startCount();
-            measurement->logEvent(MeasurementModule::display, ACESBLUE::blue);
+            measurement->logEvent(MeasurementModule::Display, ACESBLUE::blue);
             index++;
             break;
         case End:
@@ -186,7 +185,7 @@ void memory::advanceGame()
             currentState = Display;
             ui->diffButtonFrame->hide();
             ui->NumLabel->hide();
-            measurement->logEvent(MeasurementModule::Memend, ACESBLUE::blue);
+            measurement->logEvent(MeasurementModule::MemEnd, ACESBLUE::blue);
     }
 }
 
@@ -203,7 +202,7 @@ void memory::StartGame()
     index = 0;
     correct = 0;
     gameTimer->start(TIMER_INTERVAL);
-    measurement->logEvent(MeasurementModule::eventType::Memstart, ACESBLUE::blue);
+    measurement->logEvent(MeasurementModule::eventType::MemStart, ACESBLUE::blue);
 
     // Remove old instance of the ready form
     ui->stackedWidget->removeWidget(form);
@@ -235,30 +234,30 @@ void memory::processSelection()
         userAns[index] = 1;     // User made correct selection
         correct++;
         //qDebug() << "correct\n";
-        measurement->logEvent(MeasurementModule::eventType::correct, ACESBLUE::blue);
+        measurement->logEvent(MeasurementModule::eventType::Correct, ACESBLUE::blue);
         }
         else {
         userAns[index-1] = 0;
         //qDebug() << "incorrect\n";
-        measurement->logEvent(MeasurementModule::eventType::incorrect, ACESBLUE::blue);
+        measurement->logEvent(MeasurementModule::eventType::Incorrect, ACESBLUE::blue);
         }
 
         // Update number display
         displayNum = testNum[index++];
         ui->NumLabel->setText(QString::number(displayNum));
-        measurement->logEvent(MeasurementModule::eventType::display, ACESBLUE::blue);
+        measurement->logEvent(MeasurementModule::eventType::Display, ACESBLUE::blue);
     }
     else {
         if (selection == Ans[index-1]) {   // Compare user guess to actual value
         userAns[index] = 1;     // User made correct selection
         correct++;
         //qDebug() << "correct\n";
-        measurement->logEvent(MeasurementModule::eventType::correct, ACESBLUE::blue);
+        measurement->logEvent(MeasurementModule::eventType::Correct, ACESBLUE::blue);
         }
         else {
         userAns[index-1] = 0;
         //qDebug() << "incorrect\n";
-        measurement->logEvent(MeasurementModule::eventType::incorrect, ACESBLUE::blue);
+        measurement->logEvent(MeasurementModule::eventType::Incorrect, ACESBLUE::blue);
         }
 
         currentState = End;

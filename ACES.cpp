@@ -12,6 +12,7 @@ ACES::ACES(QWidget *parent)
 
     spotDiffGame = new SpotTheDiff(this);
     MemoryGame = new memory(this);
+    //Tetrizz = new Widget(this);
     ACESBLUE::blue = new BluetoothManager(this);
 
     QScreen *primaryScreen = QGuiApplication::primaryScreen();
@@ -36,9 +37,11 @@ ACES::ACES(QWidget *parent)
 
     ui->stackedWidget->addWidget(spotDiffGame);
     ui->stackedWidget->addWidget(MemoryGame);
+    //ui->stackedWidget->addWidget(Tetrizz);
 
     connect(spotDiffGame, SIGNAL(homeClicked()), this, SLOT(moveHome()));
     connect(MemoryGame, SIGNAL(homeClicked()), this, SLOT(moveHome()));
+    //connect(Tetrizz, SIGNAL(homeClicked()), this, SLOT(moveHome()));
 }
 
 ACES::~ACES()
@@ -72,5 +75,15 @@ void ACES::on_memoryButton_clicked()
 {
     ui->stackedWidget->setCurrentWidget(MemoryGame);
     MemoryGame->showForm();
+}
+
+
+void ACES::on_tetrisButton_clicked()
+{
+    Tetrizz = new Widget(this);
+    ui->stackedWidget->addWidget(Tetrizz);
+    connect(Tetrizz, SIGNAL(homeClicked()), this, SLOT(moveHome()));
+    ui->stackedWidget->setCurrentWidget(Tetrizz);
+    Tetrizz->StartGame();
 }
 
