@@ -263,7 +263,7 @@ void Widget::ResetBlock()
     start_point.pos_x=AREA_COL/2-2;
     start_point.pos_y=0;
     block_pos=start_point;
-    measurement->logEvent(MeasurementModule::TetNewPiece, ACESBLUE::blue);
+    //measurement->logEvent(MeasurementModule::TetNewPiece, ACESBLUE::blue);
 }
 
 void Widget::StartGame()
