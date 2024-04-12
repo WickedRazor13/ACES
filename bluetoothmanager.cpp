@@ -116,7 +116,7 @@ void BluetoothManager::sendData(const QByteArray &data) {
 
 void BluetoothManager::socketConnected() {
     qDebug() << "Connected to device.";
-    socket->write("Connected");
+    socket->write("Connected\n");
     connect(socket, &QBluetoothSocket::readyRead, this, &BluetoothManager::readyRead);
 }
 
