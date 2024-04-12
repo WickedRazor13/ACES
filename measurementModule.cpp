@@ -41,7 +41,7 @@ void MeasurementModule::logEvent(eventType t, BluetoothManager *b)
     QString event = currentTimeString + ", "
                     + QString::number(timeSinceLastEvent) + ", "
                     + QString::number(totalTime) + ", "
-                    + eventToString(t);
+                    + eventToString(t) + "\n";
 
     // Write the time since the last event to the CSV file
 
