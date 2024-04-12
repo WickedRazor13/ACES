@@ -281,8 +281,7 @@ void Widget::StartGame()
 
 void Widget::GameOver()
 {
-    killTimer(game_timer);
-    killTimer(paint_timer);
+    EndGame();
 
     QMessageBox msgBox;
     msgBox.setWindowTitle("Failed");
