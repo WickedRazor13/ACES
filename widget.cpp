@@ -362,19 +362,36 @@ bool Widget::IsCollide(int x,int y,Direction dir)
     return false;
 }
 
+
 void Widget::BlockMove(Direction dir)
 {
     switch (dir) {
     case UP:
-        if(IsCollide(block_pos.pos_x,block_pos.pos_y,UP))
+        if(IsCollide(block_pos.pos_x, block_pos.pos_y, UP))
             break;
+
+        // Save the current block state
+        int temp_block[4][4];
+        for(int i=0; i<4; i++)
+            for(int j=0; j<4; j++)
+                temp_block[i][j] = game_area[block_pos.pos_y+i][block_pos.pos_x+j];
+
+        // Rotate the block
         BlockRotate(cur_block);
 
-        for(int i=0;i<4;i++)
-            for(int j=0;j<4;j++)
-                game_area[block_pos.pos_y+i][block_pos.pos_x+j]=cur_block[i][j];
+        // Clear previous block position
+        for(int i=0; i<4; i++)
+            for(int j=0; j<4; j++)
+                if(temp_block[i][j] == 1 && game_area[block_pos.pos_y+i][block_pos.pos_x+j] != 2)
+                    game_area[block_pos.pos_y+i][block_pos.pos_x+j] = 0;
 
-        GetBorder(cur_block,cur_border);
+        // Update game_area with the rotated block
+        for(int i=0; i<4; i++)
+            for(int j=0; j<4; j++)
+                if(cur_block[i][j] == 1)
+                    game_area[block_pos.pos_y+i][block_pos.pos_x+j] = 1;
+
+        GetBorder(cur_block, cur_border);
         break;
 
     case DOWN:
@@ -392,10 +409,23 @@ void Widget::BlockMove(Direction dir)
             break;
         }
 
-        for(int j=cur_border.lbound;j<=cur_border.rbound;j++)
-            game_area[block_pos.pos_y][block_pos.pos_x+j]=0;
+        // Update game_area with the moved block
+        for(int i=0;i<4;i++)
+            for(int j=0;j<4;j++)
+                if(cur_block[i][j] == 1)
+                    game_area[block_pos.pos_y+i][block_pos.pos_x+j] = 1;
 
         block_pos.pos_y+=1;
+
+        // Clear cells above the previous position of the piece
+        for(int i=0;i<4;i++)
+            for(int j=0;j<4;j++)
+                if(block_pos.pos_y-1+i >= 0 && cur_block[i][j] == 1 && game_area[block_pos.pos_y+i][block_pos.pos_x+j] != 2)
+                    game_area[block_pos.pos_y-1+i][block_pos.pos_x+j] = 0;
+
+
+
+        //block_pos.pos_y+=1;
 
         for(int i=0;i<4;i++)
             for(int j=cur_border.lbound;j<=cur_border.rbound;j++)
@@ -406,9 +436,22 @@ void Widget::BlockMove(Direction dir)
     case LEFT:
         if(block_pos.pos_x+cur_border.lbound==0||IsCollide(block_pos.pos_x,block_pos.pos_y,LEFT))
             break;
-        for(int i=cur_border.ubound;i<=cur_border.dbound;i++)
-            game_area[block_pos.pos_y+i][block_pos.pos_x+3]=0;
+
+        // Update game_area with the moved block
+        for(int i=0;i<4;i++)
+            for(int j=0;j<4;j++)
+                if(cur_block[i][j] == 1)
+                    game_area[block_pos.pos_y+i][block_pos.pos_x+j] = 1;
+
         block_pos.pos_x-=1;
+
+        // Clear cells to the right of the previous position of the piece
+        for(int i=0;i<4;i++)
+            for(int j=0;j<4;j++)
+                if(cur_block[i][j] == 1 && game_area[block_pos.pos_y+i][block_pos.pos_x+j+1] != 2)
+                    game_area[block_pos.pos_y+i][block_pos.pos_x+j+1] = 0;
+
+
 
         for(int i=cur_border.ubound;i<=cur_border.dbound;i++)
             for(int j=0;j<4;j++)
@@ -420,9 +463,19 @@ void Widget::BlockMove(Direction dir)
         if(block_pos.pos_x+cur_border.rbound==AREA_COL-1||IsCollide(block_pos.pos_x,block_pos.pos_y,RIGHT))
             break;
 
-        for(int i=cur_border.ubound;i<=cur_border.dbound;i++)
-            game_area[block_pos.pos_y+i][block_pos.pos_x]=0;
+        // Update game_area with the moved block
+        for(int i=0;i<4;i++)
+            for(int j=0;j<4;j++)
+                if(cur_block[i][j] == 1)
+                    game_area[block_pos.pos_y+i][block_pos.pos_x+j] = 1;
+
         block_pos.pos_x+=1;
+
+        // Clear cells to the left of the previous position of the piece
+        for(int i=0;i<4;i++)
+            for(int j=0;j<4;j++)
+                if(cur_block[i][j] == 1 && game_area[block_pos.pos_y+i][block_pos.pos_x+j-1] != 2)
+                    game_area[block_pos.pos_y+i][block_pos.pos_x+j-1] = 0;
 
         for(int i=cur_border.ubound;i<=cur_border.dbound;i++)
             for(int j=0;j<4;j++)
@@ -433,11 +486,19 @@ void Widget::BlockMove(Direction dir)
     case SPACE:
         while(block_pos.pos_y+cur_border.dbound<AREA_ROW-1&&!IsCollide(block_pos.pos_x,block_pos.pos_y,DOWN))
         {
-
-            for(int j=cur_border.lbound;j<=cur_border.rbound;j++)
-                game_area[block_pos.pos_y][block_pos.pos_x+j]=0;
+            // Update game_area with the moved block
+            for(int i=0;i<4;i++)
+                for(int j=0;j<4;j++)
+                    if(cur_block[i][j] == 1)
+                        game_area[block_pos.pos_y+i][block_pos.pos_x+j] = 1;
 
             block_pos.pos_y+=1;
+
+            // Clear cells above the previous position of the piece
+            for(int i=0;i<4;i++)
+                for(int j=0;j<4;j++)
+                    if(block_pos.pos_y-1+i >= 0 && cur_block[i][j] == 1 && game_area[block_pos.pos_y+i][block_pos.pos_x+j] != 2)
+                        game_area[block_pos.pos_y-1+i][block_pos.pos_x+j] = 0;
 
             for(int i=0;i<4;i++)
                 for(int j=cur_border.lbound;j<=cur_border.rbound;j++)
@@ -471,6 +532,14 @@ void Widget::BlockMove(Direction dir)
                 for(int j=0;j<AREA_COL;j++)
                     game_area[k][j]=game_area[k-1][j];
             line_count++;
+
+            speed_ms -= 50;     // Increase game speed
+            if (speed_ms < 100) {
+                speed_ms = 100;
+            }
+            killTimer(game_timer);
+            game_timer = startTimer(speed_ms);
+            qDebug() << "speed increased. New speed = " << speed_ms;
         }
     }
     score+=line_count*10;
@@ -479,6 +548,7 @@ void Widget::BlockMove(Direction dir)
         if(game_area[0][j]==2)
             GameOver();
 }
+
 
 void Widget::on_exitButton_clicked()
 {
