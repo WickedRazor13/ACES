@@ -84,9 +84,7 @@ void ReadyForm::updateCountdown()
         else {
             emit startGame();
         }
-        qDebug() << "start game";
     }
-
 }
 
 

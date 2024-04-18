@@ -13,7 +13,7 @@
 
 const int NUM_NUM = 48;
 
-const int DISPLAY_TIME = 2; // To acheive 3 seconds, 2 is used for processing logic time
+const int DISPLAY_TIME = 3; // 3 seconds
 const int DOWN_TIME = 30;
 const int TEST_TIME = DISPLAY_TIME * NUM_NUM;
 

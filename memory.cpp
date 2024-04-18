@@ -89,9 +89,7 @@ void memory::combineVectors(QVector<int> &oldVec, QVector<int> &newVec)
 void memory::endGame()
 {
     gameTimer->stop();
-    currentState = Display;
     index = 0;
-    advanceGame();
 }
 
 void memory::exitGame()
@@ -101,7 +99,7 @@ void memory::exitGame()
 
 void memory::advanceTimer()
 {
-    if (countdownSeconds > 0) {
+    if (countdownSeconds > 1) {
         countdownSeconds--;
 
         int minutes = countdownSeconds / 60;
@@ -121,6 +119,7 @@ void memory::advanceTimer()
     }
     else {
         gameTimer->stop();
+        ui->TimerLabel->setText("00:00");
         //currentState = static_cast<state>(static_cast<int>(currentState)+1);
         emit timerFinished();
     }
@@ -130,7 +129,6 @@ void memory::advanceNum()
 {
     if (index < NUM_NUM) {
         displayNum = seenNum[index++];
-        //qDebug() << index;
         ui->NumLabel->setText(QString::number(displayNum));
         countdownSeconds = DISPLAY_TIME;
         gameTimer->start(TIMER_INTERVAL);
@@ -146,15 +144,20 @@ void memory::advanceGame()
 {
     switch(currentState) {
         case Display:
-            showForm();
             ui->label->setText("Study the numbers below.");
             countdownSeconds = DISPLAY_TIME;
-            gameTimer->start(TIMER_INTERVAL);
             index = 0;
+            displayNum = seenNum[index];
+            ui->NumLabel->setText(QString::number(displayNum));
             ui->NumLabel->show();
+            //measurement->logEvent(MeasurementModule::Display, ACESBLUE::blue);
+            gameTimer->start(TIMER_INTERVAL);
+            index++;
             break;
         case Hide:
             countdownSeconds = DOWN_TIME;
+            ui->TimerLabel->show();
+            ui->TimerLabel->setText("00:30");
             gameTimer->start(TIMER_INTERVAL);
             ui->NumLabel->hide();
             ui->label->setText("Have a short break :)");
@@ -163,16 +166,16 @@ void memory::advanceGame()
         case Test:
             countdownSeconds = TEST_TIME;
             ui->label->setText("Is the number new or have you seen it before?");
+            gameTimer->start(TIMER_INTERVAL);
+            //gameTimer->start(5000);   // Used for accuracy testing, gives longer duration
+            measurement->startCount();
+            measurement->logEvent(MeasurementModule::Display, ACESBLUE::blue);
             ui->diffButtonFrame->show();
             index = 0;
             combineVectors(seenNum, newNum);
             displayNum = testNum[index];
             ui->NumLabel->setText(QString::number(displayNum));
             ui->NumLabel->show();
-            ui->TimerLabel->show();
-            gameTimer->start(TIMER_INTERVAL);
-            measurement->startCount();
-            measurement->logEvent(MeasurementModule::Display, ACESBLUE::blue);
             index++;
             break;
         case End:
@@ -181,6 +184,7 @@ void memory::advanceGame()
             QString info = "You got " + QString::number(correct)
                            + " out of " + QString::number(NUM_NUM);
 
+            ui->TimerLabel->hide();
             ui->label->setText(info);
             currentState = Display;
             ui->diffButtonFrame->hide();
@@ -199,14 +203,14 @@ void memory::StartGame()
 {
     initGame();
     ui->stackedWidget->setCurrentIndex(0);
-    index = 0;
     correct = 0;
-    gameTimer->start(TIMER_INTERVAL);
     measurement->logEvent(MeasurementModule::eventType::MemStart, ACESBLUE::blue);
 
     // Remove old instance of the ready form
     ui->stackedWidget->removeWidget(form);
     delete form;
+
+    advanceGame();  // Advances to initial display case
 }
 
 
@@ -261,6 +265,7 @@ void memory::processSelection()
         }
 
         currentState = End;
+        gameTimer->stop();
         emit stateFinished();
     }
 }
