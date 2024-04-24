@@ -290,7 +290,7 @@ QPushButton#newButton:hover {
             </property>
             <property name="font">
              <font>
-              <pointsize>40</pointsize>
+              <pointsize>80</pointsize>
              </font>
             </property>
             <property name="styleSheet">

@@ -15,13 +15,14 @@ class ReadyForm : public QWidget
     Q_OBJECT
 
 public:
+
     explicit ReadyForm(QWidget *parent = nullptr);
     ~ReadyForm();
 
     void changeScreen(int index);
     void changeEndLabel(QString msg);
     void changeResultLabel(QString msg);
-    void showRestartOnGameEnd();
+    void showExitOnGameEnd();
     bool getRestartValue();
 
 signals:

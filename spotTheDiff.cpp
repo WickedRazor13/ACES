@@ -21,8 +21,6 @@ SpotTheDiff::SpotTheDiff(QWidget *parent) :
     connect(gameTimer, SIGNAL(timeout()), this, SLOT(advanceTimerDisplay()));
     connect(this, SIGNAL(gameFinished()), this, SLOT(endGame()));
     connect(this, SIGNAL(gameStarted()), measurement, SLOT(startCount()));
-    //connect(this, SIGNAL(gameStarted()), measurement, SLOT(logEvent()));
-    //connect(this, SIGNAL(differenceFound()), measurement, SLOT(logEvent()));
 
     connect(&imageScene, &ImageScene::clicked, this, &SpotTheDiff::sceneClicked);
     connect(&diffScene, &ImageScene::clicked, this, &SpotTheDiff::sceneClicked);
@@ -30,6 +28,9 @@ SpotTheDiff::SpotTheDiff(QWidget *parent) :
     // Install event filters to prevent scrolling on images
     ui->imageView->viewport()->installEventFilter(this);
     ui->diffView->viewport()->installEventFilter(this);
+
+    ui->homeButton->hide();
+    ui->restartButton->hide();
 }
 
 SpotTheDiff::~SpotTheDiff()
@@ -56,26 +57,16 @@ SpotTheDiff::img SpotTheDiff::getNextImage()
     static int value = 0;
 
     if (imagesRemaining == 0) {
-        // Currently reset the images viewed status
-        imagesRemaining = NUM_IMAGES;
+//        // Uncomment to reset the images viewed status (will need to change the readyForm->showExitOnGameEnd to not hide nextButton)
+//        imagesRemaining = NUM_IMAGES;
 
-        for (int i = 0; i < NUM_IMAGES; ++i) {
-            imageArray.viewed[i] = false;
-        }
+//        for (int i = 0; i < NUM_IMAGES; ++i) {
+//            imageArray.viewed[i] = false;
+//        }
 
-        value = 0;
+//        value = 0;
         // Eventually make the game end
     }
-
-    // For some reason if Donut is displayed first, one of the diffs is almost impossible to see
-//    while (imagesRemaining == NUM_IMAGES && value == Donut) {
-//        value = QRandomGenerator::global()->bounded(NUM_IMAGES);
-//    }
-
-//    while (imageArray.viewed[value] == true && imagesRemaining != 0) {
-//       value = QRandomGenerator::global()->bounded(NUM_IMAGES);
-//    }
-
 
     imageArray.viewed[value] = true;
     imagesRemaining--;
@@ -324,7 +315,6 @@ void SpotTheDiff::endGame()
     if (itemsRemaining > 0)
     {
             form->changeEndLabel("Almost!");
-            form->showRestartOnGameEnd();
     }
 
     ui->stackedWidget->addWidget(form);
@@ -332,6 +322,10 @@ void SpotTheDiff::endGame()
 
     measurement->logEvent(MeasurementModule::eventType::STDend, ACESBLUE::blue);
 
+    // Show exit button after last image
+    if(imagesRemaining == 0) {
+        form->showExitOnGameEnd();
+    }
 }
 
 void SpotTheDiff::exitGame()

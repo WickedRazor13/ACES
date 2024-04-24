@@ -20,12 +20,13 @@ ACES::ACES(QWidget *parent)
 
     int verticalPixelSize = availableGeometry.height();
     int horizontalPixelSize = availableGeometry.width();
-    qDebug() << verticalPixelSize;
-    qDebug() << horizontalPixelSize;
+    qDebug() << "vertical pixels: " << verticalPixelSize;
+    qDebug() << "horizontal pixels: " <<horizontalPixelSize;
 
     qreal pixelRatio = QApplication::primaryScreen()->devicePixelRatio();
     qDebug() << pixelRatio;
 
+    // Change this comparison value if needed to fix ui scaling problems
     if (verticalPixelSize >= 1300) {
         // change image scale
         DifferenceLocations::SCALE_FACTOR = 2.0;

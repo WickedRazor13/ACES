@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QBluetoothSocket>
+#include <QFile>
+#include <QDir>
 #include <QBluetoothDeviceDiscoveryAgent>
 #include <QtBluetooth/qbluetoothhostinfo.h>
 #include <QtBluetooth/qbluetoothlocaldevice.h>
@@ -26,6 +28,7 @@ private slots:
     void socketDisconnected();
     void socketError(QBluetoothSocket::SocketError error);
     void readyRead(); // Slot to handle incoming data
+    void saveFile(const QByteArray &fileData);
 
 signals:
     void deviceDiscoveredSignal(const QString &deviceName); // Signal emitted when a Bluetooth device is discovered

@@ -27,6 +27,7 @@ memory::memory(QWidget *parent) :
 
     countdownSeconds = DISPLAY_TIME;
 
+    ui->homeButton->hide();
     //showForm();
 }
 
@@ -189,6 +190,7 @@ void memory::advanceGame()
             currentState = Display;
             ui->diffButtonFrame->hide();
             ui->NumLabel->hide();
+            ui->homeButton->show();
             measurement->logEvent(MeasurementModule::MemEnd, ACESBLUE::blue);
     }
 }

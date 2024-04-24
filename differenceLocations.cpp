@@ -209,7 +209,8 @@ namespace DifferenceLocations {
                                         QPoint(215,127),
                                         QPoint(330,156),
                                         QPoint(276,214),
-                                        QPoint(167,338)};
+                                        QPoint(167,338),
+                                        QPoint(312,25)};
 
     QList<QSize> vegetableSizeList = {QSize(45, 45),
                                       QSize(40, 40),
@@ -217,6 +218,7 @@ namespace DifferenceLocations {
                                       QSize(35, 35),
                                       QSize(55, 55),
                                       QSize(50, 50),
-                                      QSize(40, 40)};
+                                      QSize(40, 40),
+                                      QSize(35,35)};
 
 }

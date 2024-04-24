@@ -84,6 +84,7 @@ Widget::Widget(QWidget *parent) :
     resize(AREA_COL*BLOCK_SIZE+MARGIN*4+4*BLOCK_SIZE,AREA_ROW*BLOCK_SIZE+MARGIN*2);
 
     measurement = new MeasurementModule(this, 2);
+    ui->exitButton->hide();
 
     InitGame();
 }

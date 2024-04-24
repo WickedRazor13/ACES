@@ -1,6 +1,19 @@
 #include "bluetoothmanager.h"
 
+// Stimulation logfile name (received from controller)
+QString fileName = "/received_log.csv";
+
 BluetoothManager::BluetoothManager(QObject *parent) : QObject(parent) {
+    // Delete old received file
+    QString filePath = QDir::currentPath() + fileName;
+    QFile file(filePath);
+    if (file.exists()) {
+        if (!file.remove()) {
+            qDebug() << "Error removing existing log file";
+            // You can choose to handle this error condition as needed
+        }
+    }
+
     localAdapters = QBluetoothLocalDevice::allDevices();
     // Output each QBluetoothHostInfo object in the list to the debug stream
     for (const auto& hostInfo : localAdapters) {
@@ -133,7 +146,39 @@ void BluetoothManager::socketError(QBluetoothSocket::SocketError error) {
 void BluetoothManager::readyRead() {
     // Read incoming data from the socket
     QByteArray data = socket->readAll();
-    qDebug() << data;
 
-    emit dataReceived(data);
+    QByteArray fileData = data;
+    saveFile(fileData);
+    //The below code is for if you want to receive other bluetooth messages beyond a file (doesn't quite work)
+//    if (data.startsWith("ACES:")) {
+//        // If the incoming data indicates a file transmission
+//        // Extract the file data
+//        qDebug() << "file detected";
+//        QByteArray fileData = data.mid(5); // Skip "ACES:" prefix
+//        saveFile(fileData);
+//    } else {
+//        qDebug() << data;
+//        emit dataReceived(data);
+//    }
+}
+
+void BluetoothManager::saveFile(const QByteArray &fileData)
+{
+    QString filePath = QDir::currentPath() + fileName; // Define the file path
+    QFile file(filePath);
+
+    if (file.open(QIODevice::WriteOnly | QIODevice::Append)) {
+        // Open the file in write mode
+        qint64 bytesWritten = file.write(fileData); // Write the file data
+
+        if (bytesWritten == -1) {
+            // Error handling if writing fails
+            qDebug() << "Error writing to file:" << file.errorString();
+        }
+
+        file.close(); // Close the file
+    } else {
+        // Error handling if file opening fails
+        qDebug() << "Error opening file for writing:" << file.errorString();
+    }
 }

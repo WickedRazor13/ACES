@@ -11,6 +11,7 @@ ReadyForm::ReadyForm(QWidget *parent) :
     ui->countdownFrame->hide();
     ui->countdownFrame_2->hide();
     ui->restartButton2->hide();
+    ui->exitButton->hide();
 
     connect(ui->startButton, SIGNAL(clicked()), this, SLOT(onStartButtonClicked()));
     connect(ui->memoryStartButton, SIGNAL(clicked()), this, SLOT(on_memoryStartButton_clicked()));
@@ -42,9 +43,10 @@ void ReadyForm::changeResultLabel(QString msg)
     ui->resultsLabel->setText(msg);
 }
 
-void ReadyForm::showRestartOnGameEnd()
+void ReadyForm::showExitOnGameEnd()
 {
-    ui->restartButton2->show();
+    ui->exitButton->show();
+    ui->nextButton->hide();
 }
 
 bool ReadyForm::getRestartValue()
@@ -61,6 +63,7 @@ void ReadyForm::onStartButtonClicked()
     countdownTimer->start(TIMER_INTERVAL);
     ui->countdownLabel->setText(QString::number(countdownValue));
     qDebug() << "Countdown started";
+    ui->startButton->hide();
 }
 
 void ReadyForm::updateCountdown()
@@ -125,6 +128,7 @@ void ReadyForm::on_nextButton_clicked()
     ui->resultsLabel->setFont(font);
     ui->resultsLabel->setText(QString::number(countdownValue));
     qDebug() << "Countdown started";
+    ui->nextButton->hide();
 }
 
 
@@ -153,5 +157,6 @@ void ReadyForm::on_memoryStartButton_clicked()
     countdownTimer->start(TIMER_INTERVAL);
     ui->countdownLabel_2->setText(QString::number(countdownValue));
     qDebug() << "Countdown started";
+    ui->memoryStartButton->hide();
 }
 
