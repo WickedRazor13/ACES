@@ -161,7 +161,7 @@ void memory::advanceGame()
             ui->TimerLabel->setText("00:30");
             gameTimer->start(TIMER_INTERVAL);
             ui->NumLabel->hide();
-            ui->label->setText("Have a short break :)");
+            ui->label->setText("Have a short break :)\nTry to list U.S. States aloud while you wait.");
             measurement->logEvent(MeasurementModule::MemBreak, ACESBLUE::blue);
             break;
         case Test:

@@ -166,7 +166,8 @@ namespace DifferenceLocations {
                                     QPoint(32,300),
                                     QPoint(215,346),
                                     QPoint(342,339),
-                                    QPoint(142,465)};
+                                    QPoint(142,465),
+                                    QPoint(164,410)};
 
     QList<QSize> sushiSizeList = {QSize(55, 55),
                                   QSize(45, 45),
@@ -176,7 +177,8 @@ namespace DifferenceLocations {
                                   QSize(80, 80),
                                   QSize(70, 70),
                                   QSize(65, 65),
-                                  QSize(70, 70)};
+                                  QSize(70, 70),
+                                  QSize(30, 30)};
 
 
     // *************************** Twine ************************** //
