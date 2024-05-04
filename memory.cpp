@@ -65,26 +65,65 @@ void memory::initGame()
 
     displayNum = seenNum[0];
     ui->NumLabel->setText(QString::number(displayNum));
+
+    QFile logFile;
+    logFile.setFileName("Known_numbers.csv");
+    logFile.open(QIODevice::WriteOnly | QIODevice::Text);
+
+    QTextStream stream(&logFile);
+
+    for(int i = 0; i < NUM_NUM; i++) {
+        stream << seenNum[i] << "\n";
+    }
+
+    logFile.close();
 }
 
 void memory::combineVectors(QVector<int> &oldVec, QVector<int> &newVec)
 {
-    for (int i = 0; i < NUM_NUM; i++) {
-        bool pickFromVec1 = QRandomGenerator::global()->bounded(2); // Returns 0 or 1
+    unsigned int seed = std::chrono::system_clock::now().time_since_epoch().count();
+    QRandomGenerator rng(seed);
 
-        if (pickFromVec1 && !oldVec.isEmpty()) {
-            testNum.append(oldVec.back());
-            //qDebug() << oldVec.back();
-            oldVec.pop_back();    // Might need to change to pass by value so it doesn't mess with original vector
-            Ans[i] = 0;     // Set to 0 for old number
-        }
-        else if (!newVec.isEmpty()) {
-            testNum.append(newVec.back());
-            //qDebug() << newVec.back();
-            newVec.pop_back();
-            Ans[i] = 1;     // Set to 1 for new number
+    // Shuffle both number vectors
+    std::shuffle(oldVec.begin(), oldVec.end(), rng);
+    std::shuffle(newVec.begin(), newVec.end(), rng);
+
+    // Fill test number vector
+    for (int i = 0; i < NUM_NUM; i++) {
+        if (i < NUM_NUM/2) {
+            testNum.append(oldVec[i]); // Add known numbers
+        } else {
+            testNum.append(newVec[i]); // Add unknown numbers
         }
     }
+
+    std::shuffle(testNum.begin(), testNum.end(), rng);  // Shuffle test number vector
+
+    for (int i =0; i < NUM_NUM; i++) {
+        if (oldVec.contains(testNum[i])){
+            Ans.append(0);  // Set 0 for old number
+        }
+        else {
+            Ans.append(1);  // Set 1 for new number
+        }
+    }
+
+    QFile logFile;
+    logFile.setFileName("Test_numbers.csv");
+    logFile.open(QIODevice::WriteOnly | QIODevice::Text);
+
+    QTextStream stream(&logFile);
+
+    for(int i = 0; i < NUM_NUM; i++) {
+        stream << testNum[i] << ", ";
+        if (Ans[i] == 0) {
+            stream << "known\n";
+        } else if (Ans[i] == 1) {
+            stream << "unknown\n";
+        }
+    }
+
+    logFile.close();
 }
 
 void memory::endGame()
@@ -161,7 +200,7 @@ void memory::advanceGame()
             ui->TimerLabel->setText("00:30");
             gameTimer->start(TIMER_INTERVAL);
             ui->NumLabel->hide();
-            ui->label->setText("Have a short break :)\nTry to list U.S. States aloud while you wait.");
+            ui->label->setText("Have a short break :)\nTry to list the alphabet backwards while you wait.");
             measurement->logEvent(MeasurementModule::MemBreak, ACESBLUE::blue);
             break;
         case Test:

@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QString>
 #include <QVector>
+#include <QFile>
+#include <QTextStream>
 #include <QRandomGenerator>
 #include <QTimer>
 #include <algorithm>
@@ -79,7 +81,7 @@ private:
 
     QVector<int> testNum;
     bool userAns[NUM_NUM];
-    bool Ans[NUM_NUM];
+    QVector<bool> Ans;
     bool selection; // 0 = old, 1 = new
 
     state currentState;
